@@ -2,6 +2,7 @@ package application;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 import com.mysql.fabric.xmlrpc.base.Data;
 
@@ -13,7 +14,8 @@ import model.entities.Seller;
 public class Program {
 
 	public static void main(String[] args) {
-		
+	
+		Scanner sc = new Scanner(System.in);
 		
 		SellerDao sellerdao = DaoFactory.CreatSellerDao();
 		
@@ -50,7 +52,14 @@ public class Program {
 		 sellerdao.update(seller);
 		 System.out.println("updadte completed");
 		 
-		
+		 System.out.println("\n=== TEST 5 : Seller isnsert ====");
+		 System.out.println("Enter id for delete test ");
+		 int id = sc.nextInt();
+		 
+		 sellerdao.deletBayId(id);
+		 System.out.println("Delete completed");
+		 
+		sc.close();
 		
 }
 	
