@@ -1,6 +1,9 @@
 package application;
 
+import java.util.Date;
 import java.util.List;
+
+import com.mysql.fabric.xmlrpc.base.Data;
 
 import model.dao.DaoFactory;
 import model.dao.SellerDao;
@@ -36,7 +39,10 @@ public class Program {
 			System.out.println(seller2);
 		
 	}
-
+		System.out.println("\n=== TEST 4 : Seller isnsert ====");
+		Seller newSeller = new Seller(null, "Greg", "gmail@hotmail", new Date(), 4000.0, department);
+		sellerdao.insert(newSeller);
+		System.out.println("Inseted! New id = " + newSeller.getId());
 }
 	
 }

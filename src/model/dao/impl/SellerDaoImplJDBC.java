@@ -2,6 +2,7 @@ package model.dao.impl;
 
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.mysql.jdbc.PreparedStatement;
+import com.mysql.jdbc.Statement;
+import com.sun.net.httpserver.Authenticator.Result;
 
 import db.DB;
 import db.DbException;
@@ -31,7 +34,66 @@ public class SellerDaoImplJDBC implements SellerDao {
 
 	@Override
 	public void insert(Seller obj) {
+		
+		   PreparedStatement st = null;
+		
+	try {
+		 
+		   
+		    st = (PreparedStatement) conn.prepareStatement(
+		    		"INSERT INTO seller "
+		    		 + "(Name, Email, BirthDate, BaseSalary, DepartmentId) "
+		    		 + "VALUES "
+		    		 + " (?, ?, ?, ?, ?)",
+		    		 Statement.RETURN_GENERATED_KEYS);
+		    
+		    st.setString(1, obj.getName());
+		    st.setString(2, obj.getEmail());
+		    st.setDate(3, new java.sql.Date(obj.getBirthDate().getTime()));
+		    st.setDouble(4,obj.getBaseSalary());
+		    st.setInt(5, obj.getDepartment().getId());
+	        
+		    int rowsAffected = st.executeUpdate();
+		    
+		    if(rowsAffected >0 ) {
+		    	
+		    	 ResultSet rs = st.getGeneratedKeys();
+		    	 
+		    if(rs.next()) {
+		    	int id = rs.getInt(1);
+		    	obj.setId(id);
+		    }
+		    
+		       DB.closeResultSet(rs);
+		    
+		    }
+		    
+		    else {
+		    	
+		    	throw new DbException("Unexpected erro no rows affected");
+		    }
+		    
+		    
+		    
+		    	
+		  
+	}
+	
+	catch(SQLException e) {
+		
+		System.out.println(e.getMessage());
+		
 
+	    } 
+	
+    	finally {
+
+		DB.closeStatement(st);
+		
+	}
+
+	
+	
 	}
 
 	@Override
@@ -64,8 +126,9 @@ public class SellerDaoImplJDBC implements SellerDao {
 
 				Department dep = instantiatDepartment(rs);
 
-				Seller obj = instantiateSeller(rs , dep)
-;				return obj;
+				Seller obj = instantiateSeller(rs , dep);
+				
+				return obj;
 
 			}
 
